@@ -1,0 +1,4 @@
+runtime: nodejs16
+service: "server"
+env_variables:
+  BUCKET_NAME: "node-app-bucket"

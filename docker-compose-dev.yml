@@ -23,7 +23,7 @@ services:
     volumes:
       - ./server:/node
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - DB_NAME=app
       - DB_USERNAME=postgres
       - DB_PASSWORD=

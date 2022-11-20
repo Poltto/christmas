@@ -2,20 +2,22 @@ var express = require('express');
 var router = express.Router();
 var pl = require('pg').Pool;
 var jwt = require('jsonwebtoken');
+const {Pool} = require("pg");
+const process = require("process");
 
-const pool = new pl({
-  user: 'postgres',
-  host: 'app-db',
-  database: 'app',
-  password: '',
-  port: 5432,
+const pool = new Pool({
+  user: process.env.POSTGRES_USERNAME,
+  host: process.env.POSTGRES_HOST,
+  database: process.env.POSTGRES_DATABASE,
+  password: process.env.POSTGRES_PASSWORD,
+  port: process.env.POSTGRES_PORT,
 })
 
 router.post('/login', function(req, res) {
   const username = req.body.username;
   const password = req.body.password;
   console.log(req);
-  pool.query('SELECT * FROM public.user WHERE username = $1 AND password = $2', [username, password], (error, results) => {
+  pool.query('SELECT * FROM user WHERE username = $1 AND password = $2', [username, password], (error, results) => {
     if (error) {
       throw error
     }
