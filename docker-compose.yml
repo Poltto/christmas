@@ -1,0 +1,224 @@
+version: "3.3"
+services:
+  client:
+    container_name: gift-client
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    working_dir: /app
+    volumes:
+      - ./client/src:/app/src
+    environment:
+      CHOKIDAR_USEPOLLING: true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
+      - "traefik.http.routers.frontend.rule=Host(`${DOMAIN:-localhost}`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls.certresolver=lets-encrypt"
+    networks:
+      - traefik_default
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./server:/node
+    environment:
+      - NODE_ENV=production
+      - DB_NAME=app
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=
+      - DB_HOST=app-db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.api-server.loadbalancer.server.port=80"
+      - "traefik.http.routers.api-server.rule=Host(`localhost`)  &&
+        PathPrefix(`/d/`)"
+      - "traefik.http.routers.api-server.middlewares=d-stripprefix"
+      - "traefik.http.middlewares.d-stripprefix.stripprefix.prefixes=/d/"
+    networks:
+      - traefik_default
+
+  app-db:
+    container_name: db
+    build:
+      context: ./server/db
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./server/db/init:/docker-entrypoint-initdb.d/
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+      - DB_NAME=app
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=
+    ports:
+      - "5432:5432"
+    networks:
+      - traefik_default
+
+  traefik:
+    image: docker.io/traefik:v2.6
+    command:
+      # - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:4200"
+    ports:
+      - "4200:4200"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - traefik_default
+volumes:
+  node_modules_app:
+  node_modules_node:
+
+networks:
+  traefik_default:
+
+
+services:
+  frontend:
+    container_name: terravisie-frontend
+    image: eu.gcr.io/terravisie/frontend:${VERSION_TAG:-tagless}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
+      - "traefik.http.routers.frontend.rule=Host(`${DOMAIN:-localhost}`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls.certresolver=lets-encrypt"
+    networks:
+      - traefik_default
+
+  api-server:
+    container_name: terravisie-api-server
+    image: eu.gcr.io/terravisie/api-server:${VERSION_TAG:-tagless}
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: "/run/secrets/bq_credentials"
+      TV_ENVIRONMENT: ${TV_ENVIRONMENT}
+      TV_GCP_PROJECT: ${TV_GCP_PROJECT}
+      POSTGRES_DB: "app"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: ""
+      POSTGRES_PORT: 5432"
+      POSTGRES_HOST: "app-db"
+      KEYCLOAK_AUTH_URL: 'https://auth:8080/auth/realms/Terravisie/protocol/openid-connect/auth'
+      KEYCLOAK_TOKEN_URL: 'https://auth:8080/auth/realms/Terravisie/protocol/openid-connect/token'
+      KEYCLOAK_JWKS_URI: 'https://auth:8080/auth/realms/Terravisie/protocol/openid-connect/certs'
+      KEYCLOAK_LOGOUT_URL: 'https://auth:8080/auth/realms/Terravisie/protocol/openid-connect/logout'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.api-server.loadbalancer.server.port=80"
+      - "traefik.http.routers.api-server.rule=Host(`${DOMAIN:-localhost}`)  &&
+        PathPrefix(`/d/`)"
+      - "traefik.http.middlewares.d-stripprefix.stripprefix.prefixes=/d/"
+      - "traefik.http.routers.api-server.middlewares=d-stripprefix"
+      - "traefik.http.routers.api-server.entrypoints=websecure"
+      - "traefik.http.routers.api-server.tls.certresolver=lets-encrypt"
+    secrets:
+      - bq_credentials
+      - kc_credentials
+    networks:
+      - traefik_default
+
+  app-db:
+    image: eu.gcr.io/terravisie/terravisie-app-db:${VERSION_TAG:-tagless}
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - traefik_default
+
+  auth:
+    image: quay.io/keycloak/keycloak:18.0.1
+    environment:
+      - KC_DB=postgres
+      - KC_DB_URL_HOST=keycloak-db
+      - KC_DB_URL_DATABASE=keycloak
+      - KC_DB_URL_PORT=5432
+      - KC_DB_USERNAME=keycloak
+      - KC_DB_PASSWORD=gPTDaMH53YVc
+      - KC_DB_SCHEMA=public
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=53YVcgPTDaMH
+      - KC_HTTP_RELATIVE_PATH=/auth
+      - KC_PROXY=edge
+      - KC_HOSTNAME_STRICT_HTTPS=false
+    command: start-dev
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.auth.loadbalancer.server.port=8080"
+      - "traefik.http.routers.auth.rule=Host(`${DOMAIN:-localhost}`) && PathPrefix(`/auth`)"
+      - "traefik.http.routers.auth.entrypoints=websecure"
+      - "traefik.http.routers.auth.tls.certresolver=lets-encrypt"
+    networks:
+      - traefik_default
+
+  keycloak-db:
+    image: eu.gcr.io/terravisie/keycloak-db:${VERSION_TAG:-tagless}
+    volumes:
+      - kc_psql:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=keycloak
+      - POSTGRES_USER=keycloak
+      - POSTGRES_PASSWORD=gPTDaMH53YVc
+    networks:
+      - traefik_default
+
+  traefik:
+    image: docker.io/traefik:v2.6
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entryPoints.websecure.address=:443"
+      - "--entryPoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entryPoints.web.http.redirections.entryPoint.scheme=https"
+      - "--certificatesResolvers.lets-encrypt.acme.email=${ACME_EMAIL:-d.hetharia@sobolt.com}"
+      - "--certificatesResolvers.lets-encrypt.acme.tlsChallenge=true"
+      - "--certificatesResolvers.lets-encrypt.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - letsencrypt:/letsencrypt
+    networks:
+      - traefik_default
+
+volumes:
+  letsencrypt:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/deploy/letsencrypt
+      o: bind
+
+  kc_psql:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/deploy/kc_psql
+      o: bind
+
+  pg-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/deploy/postgres
+      o: bind
+
+secrets:
+  bq_credentials:
+    file: ./secrets/bq-terravisie.json
+  kc_credentials:
+    file: ./secrets/kc-terravisie.json
+networks:
+  traefik_default:
