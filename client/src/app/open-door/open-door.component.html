@@ -1,0 +1,3 @@
+<div class="door-container door-{{door.id}}" [ngClass]="{'opening': door.isOpen}" #doorRef (click)="open()">
+  <glitter *ngIf="door.isOpen" class="glitter"></glitter>
+</div>

@@ -1,0 +1,78 @@
+services:
+  client:
+    container_name: gift-client
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    working_dir: /app
+    volumes:
+      - ./client/src:/app/src
+    environment:
+      CHOKIDAR_USEPOLLING: true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
+      - "traefik.http.routers.frontend.rule=Host(`localhost`)"
+      - "traefik.http.routers.frontend.entrypoints=web"
+    networks:
+      - traefik_default
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./server:/node
+    environment:
+      - NODE_ENV=production
+      - DB_NAME=app
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=
+      - DB_HOST=app-db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.api-server.loadbalancer.server.port=80"
+      - "traefik.http.routers.api-server.rule=Host(`localhost`)  &&
+        PathPrefix(`/d/`)"
+      - "traefik.http.routers.api-server.middlewares=d-stripprefix"
+      - "traefik.http.middlewares.d-stripprefix.stripprefix.prefixes=/d/"
+    networks:
+      - traefik_default
+
+  app-db:
+    container_name: db
+    build:
+      context: ./server/db
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./server/db/init:/docker-entrypoint-initdb.d/
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+      - DB_NAME=app
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=
+    ports:
+      - "5432:5432"
+    networks:
+      - traefik_default
+
+  traefik:
+    image: docker.io/traefik:v2.6
+    command:
+      # - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:4200"
+    ports:
+      - "4200:4200"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - traefik_default
+volumes:
+  node_modules_app:
+  node_modules_node:
+
+networks:
+  traefik_default:
