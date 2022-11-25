@@ -15,17 +15,12 @@ const pool = new Pool({
 router.get('/get-calendar-doors', function(req, res) {
   let authHeader = req.headers.authorization;
   let token = authHeader && authHeader.split(' ')[1];
-  console.log(  'user', process.env.POSTGRES_USERNAME,
-    'host', process.env.POSTGRES_HOST,
-    'database', process.env.POSTGRES_DATABASE,
-    'password', process.env.POSTGRES_PASSWORD,
-    'port', process.env.POSTGRES_PORT)
   jwt.verify(token, 'supersafesecretkey', function(err, decoded) {
     if(err) {
       res.status(401).send('Unauthorized');
 
     } else {
-      pool.query('SELECT * FROM door', [], (error, results) => {
+      pool.query('SELECT * FROM public.door', [], (error, results) => {
         if (error) {
           throw error
         }
