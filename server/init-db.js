@@ -41,9 +41,6 @@ CREATE TABLE public.user (
     password character varying(255) NOT NULL
 );
 
-
-ALTER TABLE public.user OWNER TO postgres;
-
 INSERT INTO public.user (id, username, password)
 VALUES (1, 'marie', 'potpourri');
 
@@ -80,8 +77,6 @@ VALUES (1, false, 'potpourri', '2022-12-01 00:00:00'),
        (22, false, 'potpourri', '2022-12-22 00:00:00'),
        (23, false, 'potpourri', '2022-12-23 00:00:00'),
        (24, false, 'potpourri', '2022-12-24 00:00:00');
-
-ALTER TABLE public.door OWNER TO postgres;
 
   `, [], (err, res) => {
     if(err) {
