@@ -16,7 +16,7 @@ export class ApiService {
   }
 
   public getCalendarDoors() {
-    return this.http.get('/d/app/get-calendar-doors');
+    return this.http.post('/d/app/get-calendar-doors', {});
   }
 
   public login(data: {

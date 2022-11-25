@@ -12,7 +12,7 @@ const pool = new Pool({
   port: process.env.POSTGRES_PORT,
 })
 
-router.get('/get-calendar-doors', function(req, res) {
+router.post('/get-calendar-doors', function(req, res) {
   let authHeader = req.headers.authorization;
   let token = authHeader && authHeader.split(' ')[1];
   jwt.verify(token, 'supersafesecretkey', function(err, decoded) {
