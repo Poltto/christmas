@@ -24,7 +24,6 @@ router.post('/get-calendar-doors', function(req, res) {
         if (error) {
           throw error
         }
-        console.log("Got some doors, ", results?.rows);
         res.status(200).json(results?.rows);
       });
     }
@@ -32,12 +31,20 @@ router.post('/get-calendar-doors', function(req, res) {
 })
 
 router.post('/open-door', function(req, res) {
-  const token = req.body.token;
+  let authHeader = req.headers.authorization;
+  let token = authHeader && authHeader.split(' ')[1];
+  const doorId = req.body.id;
   jwt.verify(token, 'supersafesecretkey', function(err, decoded) {
     if(err) {
       res.status(401).send('Unauthorized');
     } else {
-
+      pool.query('UPDATE public.door SET isOpened = true WHERE id = $1', [doorId], (error, results) => {
+        if (error) {
+          throw error
+        } else {
+          res.status(200).json({"data": "OK"});
+        }
+      });
     }
   })
 })

@@ -48,8 +48,8 @@ export class GlitterComponent implements AfterViewInit {
       }
       this.renderer.addClass(element, 'glitter');
 
-      this.renderer.setStyle(element, 'top', rand(20,80)+'%');
-      this.renderer.setStyle(element, 'left', rand(20,80)+'%');
+      this.renderer.setStyle(element, 'top', rand(0,100)+'%');
+      this.renderer.setStyle(element, 'left', rand(0,100)+'%');
       this.renderer.appendChild(this.glitterContainer.nativeElement, element);
     }
 

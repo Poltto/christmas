@@ -24,7 +24,7 @@ services:
       - ./server:/node
     environment:
       - NODE_ENV=development
-      - DB_NAME=app
+      - DB_NAME=postgres
       - DB_USERNAME=postgres
       - DB_PASSWORD=
       - DB_HOST=app-db
@@ -47,7 +47,7 @@ services:
       - ./server/db/init:/docker-entrypoint-initdb.d/
     environment:
       - "POSTGRES_HOST_AUTH_METHOD=trust"
-      - DB_NAME=app
+      - DB_NAME=postgres
       - DB_USERNAME=postgres
       - DB_PASSWORD=
     ports:

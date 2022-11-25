@@ -9,7 +9,7 @@ var initDb = require('./init-db');
 if (process.env.NODE_ENV !== 'production') {
   process.env.POSTGRES_PORT = 5432;
   process.env.POSTGRES_HOST = 'app-db';
-  process.env.POSTGRES_DATABASE = 'app';
+  process.env.POSTGRES_DATABASE = 'postgres';
   process.env.POSTGRES_PASSWORD = '';
   process.env.POSTGRES_USERNAME = 'postgres';
   process.env.APP_LISTEN_PORT = '80';

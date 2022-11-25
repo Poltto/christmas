@@ -38,6 +38,9 @@ export class CalendarDoorComponent implements AfterViewInit, OnChanges{
 
   public ngOnChanges(changes: SimpleChanges) {
     if(changes['isCanvasDrawing'] && !changes['isCanvasDrawing'].currentValue) {
+      if(!this.canvas) {
+        return;
+      }
       let containerRect = this.container.getBoundingClientRect();
       let left = this.elementRef.nativeElement.offsetLeft;
       let top = this.elementRef.nativeElement.offsetTop;

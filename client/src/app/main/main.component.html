@@ -1,5 +1,8 @@
 <div class="main-page-container h-full w-full " #mainContainer>
   <canvas class="main-canvas" #offscreenCanvas></canvas>
-  <calendar-door (click)="openDoor(door)" [isCanvasDrawing]="isCanvasDrawing" [mainCanvas]="offscreenCanvas" [container]="mainContainer" class="door-{{door.id}}" [door]="door" *ngFor="let door of calendarDoors"></calendar-door>
-  <open-calendar-door [door]="door" class="door-{{door.id}}" *ngFor="let door of calendarDoors"></open-calendar-door>
+  <calendar-door (click)="openDoor(door)" [ngClass]="{'is-opened': door.isopened}" [isCanvasDrawing]="isCanvasDrawing" [mainCanvas]="offscreenCanvas" [container]="mainContainer" class="door-{{door.id}}" [door]="door" *ngFor="let door of calendarDoors"></calendar-door>
+  <ng-container *ngFor="let door of calendarDoors">
+    <open-calendar-door *ngIf="door.isOpen" [door]="door" class="door-{{door.id}}" ></open-calendar-door>
+  </ng-container>
+  <calendar-door-message></calendar-door-message>
 </div>

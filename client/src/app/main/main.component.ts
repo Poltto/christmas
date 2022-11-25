@@ -4,6 +4,7 @@ import { ApiService } from '../api.service';
 interface IDoor {
   id: number;
   isOpen: boolean;
+  isopened: boolean;
   content: string;
   date: Date;
 }
@@ -25,7 +26,12 @@ export class MainComponent implements AfterViewInit {
 
   constructor(private apiService: ApiService) {
     this.apiService.getCalendarDoors().subscribe((data: any) => {
-      this.calendarDoors = data;
+      this.calendarDoors = data.map((door: any) => {
+        return {
+          ...door,
+          isOpen: door.isopened
+        }
+      });
     })
   }
 

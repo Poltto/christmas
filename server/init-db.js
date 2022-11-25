@@ -53,7 +53,13 @@ CREATE TABLE public.door (
 );
 
 INSERT INTO public.door (id, isOpened, content, date)
-VALUES (1, false, 'potpourri', '2022-12-01 00:00:00'),
+VALUES (1, false, 
+'It is what annoyed us so, <br>
+in the start when we first came here, oh! <br><br>
+The sound blasted through the night, <br>
+we thought it will be a nightly fight. <br><br>
+But now we rarely even remember it is there, <br>
+which is good for otherwise my ears out I would tear.', '2022-12-01 00:00:00'),
        (2, false, 'potpourri', '2022-12-02 00:00:00'),
        (3, false, 'potpourri', '2022-12-03 00:00:00'),
        (4, false, 'potpourri', '2022-12-04 00:00:00'),

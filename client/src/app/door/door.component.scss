@@ -15,6 +15,11 @@
     transform: rotateY(80deg);
   }
 
+  &.is-opened {
+    transform: rotateY(80deg);
+    transition: border-color 0.3s, filter 0.3s;
+  }
+
   .door-container {
     width: 100%;
     height: 100%;
@@ -40,7 +45,7 @@
 
   &.door-1 {
     height: 80px;
-    width: 60px;
+    width: 120px;
     top: 200px;
     left: 400px;
   }
@@ -53,8 +58,8 @@
   }
 
   &.door-3 {
-    height: 50px;
-    width: 80px;
+    height: 100px;
+    width: 120px;
     top: 40px;
     left: 1200px;
   }
@@ -67,22 +72,22 @@
   }
 
   &.door-5 {
-    height: 50px;
-    width: 50px;
+    height: 100px;
+    width: 100px;
     top: 800px;
     left: 1700px;
   }
 
   &.door-6 {
-    height: 80px;
-    width: 80px;
+    height: 120px;
+    width: 120px;
     top: 200px;
     left: 1700px;
   }
 
   &.door-7 {
     height: 100px;
-    width: 50px;
+    width: 120px;
     top: 500px;
     left: 100px;
   }
@@ -106,13 +111,13 @@
     left: 1500px;
   }
   &.door-11 {
-    height: 60px;
-    width: 70px;
+    height: 130px;
+    width: 130px;
     top: 300px;
     left: 1500px;
   }
   &.door-12 {
-    height: 70px;
+    height: 100px;
     width: 120px;
     top: 700px;
     left: 1800px;
@@ -136,20 +141,20 @@
     left: 720px;
   }
   &.door-16 {
-    height: 75px;
+    height: 100px;
     width: 120px;
     top: 50px;
     left: 50px;
   }
   &.door-17 {
-    height: 60px;
+    height: 120px;
     width: 200px;
     top: 1000px;
     left: 350px;
   }
   &.door-18 {
     height: 120px;
-    width: 75px;
+    width: 150px;
     top: 50px;
     left: 1900px;
   }
@@ -160,19 +165,19 @@
     left: 2000px;
   }
   &.door-20 {
-    height: 80px;
+    height: 100px;
     width: 120px;
     top: 1000px;
     left: 2000px;
   }
   &.door-21 {
-    height: 85px;
+    height: 100px;
     width: 122px;
     top: 400px;
     left: 400px;
   }
   &.door-22 {
-    height: 85px;
+    height: 120px;
     width: 122px;
     top: 600px;
     left: 1500px;

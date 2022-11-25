@@ -15,6 +15,7 @@ import { CalendarDoorComponent } from './door/door.component';
 import { CalendarOpenDoorComponent } from './open-door/open-door.component';
 import { GlitterComponent } from './glitter/glitter.component';
 import { HttpInterceptor } from './http.interceptor';
+import { CalendarDoorMessageComponent } from './calendar-door-message/calendar-door-message.component';
 
 @NgModule({
   declarations: [
@@ -23,14 +24,16 @@ import { HttpInterceptor } from './http.interceptor';
     LoginComponent,
     CalendarDoorComponent,
     CalendarOpenDoorComponent,
-    GlitterComponent
+    GlitterComponent,
+    CalendarDoorMessageComponent
   ],
   exports: [
     MainComponent,
     LoginComponent,
     CalendarDoorComponent,
     CalendarOpenDoorComponent,
-    GlitterComponent
+    GlitterComponent,
+    CalendarDoorMessageComponent
   ],
   imports: [
     BrowserModule,

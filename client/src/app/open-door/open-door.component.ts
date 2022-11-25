@@ -8,6 +8,8 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
+import { CalendarService } from '../calendar.service';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'open-calendar-door',
@@ -24,16 +26,37 @@ export class CalendarOpenDoorComponent implements AfterViewInit, OnChanges{
   public canvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('doorRef')
   public doorRef!: ElementRef<HTMLElement>;
-  constructor(private elementRef: ElementRef, private cdr: ChangeDetectorRef) {
+
+  private glitterVisible = false;
+
+  constructor(
+    private elementRef: ElementRef,
+    private calendarService: CalendarService,
+    private apiService: ApiService
+    ) {
 
   }
 
   public open() {
-    this.elementRef.nativeElement.classList.add('opening');
+    let bbox = this.doorRef.nativeElement.getBoundingClientRect();
+    this.calendarService.openGift(this.door, {
+      x: bbox.left,
+      y: bbox.top
+    });
+    console.log("opening door", this.door);
+    this.apiService.openDoor(this.door.id).subscribe((data: any) => {
+      console.log('opened door');
+    });
+  }
+
+  public isGlitterVisible() {
+    return this.door.isOpen && this.glitterVisible;
   }
 
   public ngAfterViewInit(): void {
-
+    setTimeout(() => {
+      this.glitterVisible = true;
+    }, 800);
 
   }
 
