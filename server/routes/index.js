@@ -16,7 +16,8 @@ const pool = new Pool({
 router.post('/login', function(req, res) {
   const username = req.body.username;
   const password = req.body.password;
-  console.log(req);
+  console.log(process.env.POSTGRES_HOST);
+  console.log(process.env.NODE_ENV);
   pool.query('SELECT * FROM user WHERE username = $1 AND password = $2', [username, password], (error, results) => {
     if (error) {
       throw error
