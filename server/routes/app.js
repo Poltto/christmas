@@ -24,6 +24,7 @@ router.get('/get-calendar-doors', function(req, res) {
         if (error) {
           throw error
         }
+        console.log("Got some doors, ", results?.rows);
         res.status(200).json(results?.rows);
       });
     }
