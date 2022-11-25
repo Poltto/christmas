@@ -27,9 +27,6 @@ SET row_security = off;
 -- Name: global; Type: SCHEMA; Schema: -; Owner: postgres
 --
 
-
-ALTER SCHEMA global OWNER TO postgres;
-
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
