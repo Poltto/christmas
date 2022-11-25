@@ -3,6 +3,9 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const {Pool} = require("pg");
+const process = require("process");
+var initDb = require('./init-db');
 if (process.env.NODE_ENV !== 'production') {
   process.env.POSTGRES_PORT = 5432;
   process.env.POSTGRES_HOST = 'app-db';
@@ -11,6 +14,24 @@ if (process.env.NODE_ENV !== 'production') {
   process.env.POSTGRES_USERNAME = 'postgres';
   process.env.APP_LISTEN_PORT = '80';
 }
+const pool = new Pool({
+  user: process.env.POSTGRES_USERNAME,
+  host: process.env.POSTGRES_HOST,
+  database: process.env.POSTGRES_DATABASE,
+  password: process.env.POSTGRES_PASSWORD,
+  port: process.env.POSTGRES_PORT,
+})
+
+pool.query('SELECT * FROM public.door', [], (error, results) => {
+  if(error) {
+    initDb();
+  } else {
+    console.log(results);
+    console.log("Database already exists, skipping init");
+  }
+
+});
+
 var app = express();
 
 // view engine setup
@@ -45,7 +66,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.send({"data": "Error"});
 });
 
 console.log("ENV", process.env.NODE_ENV);
