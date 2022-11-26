@@ -1,5 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '../api.service';
+import { fromEvent } from 'rxjs';
+import { CalendarService } from '../calendar.service';
 
 interface IDoor {
   id: number;
@@ -24,7 +26,7 @@ export class MainComponent implements AfterViewInit {
   public isCanvasDrawing: boolean = true;
   public calendarDoors: IDoor[] = [];
 
-  constructor(private apiService: ApiService) {
+  constructor(private apiService: ApiService, private calendarService: CalendarService) {
     this.apiService.getCalendarDoors().subscribe((data: any) => {
       this.calendarDoors = data.map((door: any) => {
         return {
@@ -54,5 +56,11 @@ export class MainComponent implements AfterViewInit {
         self.isCanvasDrawing = false;
       }
     }
+
+    fromEvent(document, 'keydown').subscribe((event: any) => {
+      if(event.key === 'Escape') {
+        this.calendarService.closePopup();
+      }
+    });
   }
 }

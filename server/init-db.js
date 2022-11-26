@@ -1,6 +1,7 @@
 const {Pool} = require("pg");
 const process = require("process");
-
+const fs = require('fs')
+const insert_text = fs.readFileSync('./door_insert.txt', 'utf8');
 function initDb() {
 
   const pool = new Pool({
@@ -93,4 +94,26 @@ which is good for otherwise my ears out I would tear.', '2022-12-01 00:00:00'),
   })
 }
 
-module.exports = initDb;
+function resetDB() {
+
+  const pool = new Pool({
+    user: process.env.POSTGRES_USERNAME,
+    host: process.env.POSTGRES_HOST,
+    database: process.env.POSTGRES_DATABASE,
+    password: process.env.POSTGRES_PASSWORD,
+    port: process.env.POSTGRES_PORT,
+  })
+  console.log("Resetting doors");
+
+  pool.query(`
+  TRUNCATE TABLE public.door;
+  ${insert_text}
+  `, [], (err, res) => {
+    console.log(err, res);
+  });
+}
+
+module.exports = {
+  initDb,
+  resetDB
+};

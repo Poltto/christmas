@@ -34,12 +34,21 @@ export class CalendarDoorMessageComponent implements AfterViewInit, OnDestroy{
     ).subscribe((openGift: IOpenGift) => {
       this.open(openGift);
     })
+
+    this.calendarService.closePopup$.pipe(
+      takeUntil(this.destroyed$)
+    ).subscribe(() => {
+      this.close();
+    })
   }
 
   private open(openGift: IOpenGift) {
+    if(this.innerContainer) {
+      this.innerContainer.nativeElement.style.opacity = 0;
+    }
     this.currentMessage = openGift.door.content;
-    this.elementRef.nativeElement.style.left = openGift.location.x + 'px';
-    this.elementRef.nativeElement.style.top = openGift.location.y + 'px';
+    this.elementRef.nativeElement.style.left = openGift.location.x + 50 + 'px';
+    this.elementRef.nativeElement.style.top = openGift.location.y + 50 + 'px';
     this.elementRef.nativeElement.style.width = 0 + 'px';
     this.elementRef.nativeElement.style.height = 0 + 'px';
     this.elementRef.nativeElement.style.display = 'block';
@@ -56,8 +65,8 @@ export class CalendarDoorMessageComponent implements AfterViewInit, OnDestroy{
       if(timeElapsed <= animationDuration) {
         this.elementRef.nativeElement.style.width = targetWidth * (timeElapsed / animationDuration) + 'px';
         this.elementRef.nativeElement.style.height = targetHeight * (timeElapsed / animationDuration) + 'px';
-        this.elementRef.nativeElement.style.left = openGift.location.x + (targetLocation.x - openGift.location.x) * (timeElapsed / animationDuration) + 'px';
-        this.elementRef.nativeElement.style.top = openGift.location.y + (targetLocation.y - openGift.location.y) * (timeElapsed / animationDuration) + 'px';
+        this.elementRef.nativeElement.style.left = openGift.location.x + 50 + (targetLocation.x - (openGift.location.x + 50)) * (timeElapsed / animationDuration) + 'px';
+        this.elementRef.nativeElement.style.top = openGift.location.y + 50 + (targetLocation.y - (openGift.location.y + 50)) * (timeElapsed / animationDuration) + 'px';
         timeElapsed += 10;
       }
     }, 10)
@@ -70,9 +79,13 @@ export class CalendarDoorMessageComponent implements AfterViewInit, OnDestroy{
   }
 
   private close() {
-    this.elementRef.nativeElement.display = 'none';
+    if(this.innerContainer) {
+      this.innerContainer.nativeElement.style.opacity = 0;
+    }
+    this.elementRef.nativeElement.style.display = 'none';
     this.elementRef.nativeElement.style.width = 0;
     this.elementRef.nativeElement.style.height = 0;
+
   }
 
   public ngOnDestroy() {

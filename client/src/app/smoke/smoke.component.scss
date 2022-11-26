@@ -1,0 +1,16 @@
+:host {
+  height: 100%;
+  width: 100%;
+  z-index: 999999;
+  position: absolute;
+  pointer-events: none;
+  transition: opacity 0.5s;
+
+  .smoke-container {
+    height: 100%;
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+}

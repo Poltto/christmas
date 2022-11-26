@@ -16,7 +16,6 @@ export class ApiService {
   }
 
   public openDoor(id: number) {
-    console.log("opening door with id ", id);
     return this.http.post('/d/app/open-door', {
       id: id
     });

@@ -15,7 +15,9 @@ export interface IOpenGift {
 export class CalendarService {
 
   private openGiftSubject = new Subject<IOpenGift>()
+  private closePopupSubject = new Subject<boolean>()
   public openGift$ = this.openGiftSubject.asObservable();
+  public closePopup$ = this.closePopupSubject.asObservable();
 
   constructor() {
 
@@ -28,5 +30,8 @@ export class CalendarService {
     });
   }
 
+  public closePopup() {
+    this.closePopupSubject.next(true);
+  }
 
 }

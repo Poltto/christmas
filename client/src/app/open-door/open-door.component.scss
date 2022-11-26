@@ -9,34 +9,53 @@
   box-shadow: inset 0px 0px 8px 0px rgba(0,0,0,1);
 
   .door-container {
-    width: 60%;
-    height: 60%;
+    width: 100%;
+    height: 100%;
     background-color: transparent;
     position: relative;
-    background-image: url('/assets/gift.png');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
     transition: filter 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
+    .open-door-number {
+      position: absolute;
+      top: 10%;
+      color: white;
+      right: 10%;
+      font-size: 20px;
+      font-family: 'press_gutenbergregular';
+    }
+
+    .gift-container {
+      width: 60%;
+      height: 60%;
+      min-width: 60%;
+      min-height: 60%;
+      background-image: url('/assets/gift.png');
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+      position: absolute;
+      transition: background-image 0.3s;
+
+      &:hover {
+        cursor: pointer;
+        filter: brightness(1.3);
+      }
+    }
     &.is-opened {
-      background-image: url('/assets/opened_gift.png');
+      .gift-container {
+        transition: background-image 0.3s;
+        background-image: url('/assets/opened_gift.png');
+      }
+    }
 
-    }
-    &:hover {
-      cursor: pointer;
-      filter: brightness(1.3);
-    }
   }
 
-
-  &:hover {
-    border-color: white;
-    filter: brightness(1.2);
-  }
 
   &.door-1 {
-    height: 80px;
+    height: 120px;
     width: 120px;
     top: 200px;
     left: 400px;
@@ -44,16 +63,16 @@
 
   &.door-2 {
     height: 120px;
-    width: 80px;
+    width: 140px;
     top: 400px;
     left: 800px;
   }
 
   &.door-3 {
-    height: 100px;
-    width: 120px;
+    height: 150px;
+    width: 150px;
     top: 40px;
-    left: 1200px;
+    left: 1400px;
   }
 
   &.door-4 {
@@ -64,9 +83,9 @@
   }
 
   &.door-5 {
-    height: 100px;
-    width: 100px;
-    top: 800px;
+    height: 120px;
+    width: 120px;
+    top: 850px;
     left: 1700px;
   }
 
@@ -97,7 +116,7 @@
     left: 1100px;
   }
   &.door-10 {
-    height: 70px;
+    height: 100px;
     width: 120px;
     top: 1000px;
     left: 1500px;
@@ -152,7 +171,7 @@
   }
   &.door-19 {
     height: 190px;
-    width: 120px;
+    width: 160px;
     top: 400px;
     left: 2000px;
   }
@@ -176,7 +195,7 @@
   }
   &.door-23 {
     height: 144px;
-    width: 75px;
+    width: 150px;
     top: 700px;
     left: 750px;
   }
@@ -186,5 +205,4 @@
     top: 160px;
     left: 1000px;
   }
-
 }

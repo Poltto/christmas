@@ -16,6 +16,7 @@ import { CalendarOpenDoorComponent } from './open-door/open-door.component';
 import { GlitterComponent } from './glitter/glitter.component';
 import { HttpInterceptor } from './http.interceptor';
 import { CalendarDoorMessageComponent } from './calendar-door-message/calendar-door-message.component';
+import { SmokeComponent } from './smoke/smoke.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { CalendarDoorMessageComponent } from './calendar-door-message/calendar-d
     AppRoutingModule,
     HttpClientModule,
     CommonModule,
-    FormsModule
+    FormsModule,
+    SmokeComponent
   ],
   providers: [ApiService, AuthGuardService,
     { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptor, multi: true }],

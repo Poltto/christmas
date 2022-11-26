@@ -28,6 +28,7 @@ export class CalendarOpenDoorComponent implements AfterViewInit, OnChanges{
   public doorRef!: ElementRef<HTMLElement>;
 
   private glitterVisible = false;
+  public isSmokeVisible = false;
 
   constructor(
     private elementRef: ElementRef,
@@ -38,15 +39,22 @@ export class CalendarOpenDoorComponent implements AfterViewInit, OnChanges{
   }
 
   public open() {
+    if(!this.door.isopened) {
+      this.isSmokeVisible = true;
+    }
     let bbox = this.doorRef.nativeElement.getBoundingClientRect();
-    this.calendarService.openGift(this.door, {
-      x: bbox.left,
-      y: bbox.top
-    });
-    console.log("opening door", this.door);
-    this.apiService.openDoor(this.door.id).subscribe((data: any) => {
-      console.log('opened door');
-    });
+
+    setTimeout(() => {
+      this.door.isopened = true;
+      this.calendarService.openGift(this.door, {
+        x: bbox.left,
+        y: bbox.top
+      });
+      this.apiService.openDoor(this.door.id).subscribe((data: any) => {
+        console.log('opened door');
+      });
+    }, 500);
+
   }
 
   public isGlitterVisible() {

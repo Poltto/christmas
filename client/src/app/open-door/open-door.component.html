@@ -1,3 +1,9 @@
 <div (click)="open()" class="door-container door-{{door.id}}" [ngClass]="{'is-opened': door.isopened}" #doorRef>
-  <glitter [ngClass]="{'hidden': !isGlitterVisible()}" *ngIf="door.isOpen && !door.isopened" class="glitter"></glitter>
+  <div class="open-door-number">
+    {{door.id}}
+  </div>
+  <div class="gift-container">
+    <glitter [ngClass]="{'hidden': !isGlitterVisible()}" *ngIf="door.isOpen && !door.isopened" class="glitter"></glitter>
+  </div>
+  <smoke *ngIf="isSmokeVisible"></smoke>
 </div>

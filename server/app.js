@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const {Pool} = require("pg");
 const process = require("process");
-var initDb = require('./init-db');
+var db_functions = require('./init-db');
 if (process.env.NODE_ENV !== 'production') {
   process.env.POSTGRES_PORT = 5432;
   process.env.POSTGRES_HOST = 'app-db';
@@ -24,9 +24,8 @@ const pool = new Pool({
 
 pool.query('SELECT * FROM public.door', [], (error, results) => {
   if(error) {
-    initDb();
+    db_functions.initDb();
   } else {
-    console.log(results);
     console.log("Database already exists, skipping init");
   }
 
@@ -69,7 +68,6 @@ app.use(function(err, req, res, next) {
   res.send({"data": "Error"});
 });
 
-console.log("ENV", process.env.NODE_ENV);
 app.listen(process.env.APP_LISTEN_PORT, () => {
   console.log('Server started on port ' + process.env.APP_LISTEN_PORT);
 })
