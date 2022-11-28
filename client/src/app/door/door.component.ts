@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { isSameDay } from 'date-fns';
 
 @Component({
   selector: 'calendar-door',
@@ -41,21 +42,22 @@ export class CalendarDoorComponent implements AfterViewInit, OnChanges{
       if(!this.canvas) {
         return;
       }
-      let containerRect = this.container.getBoundingClientRect();
-      let left = this.elementRef.nativeElement.offsetLeft;
-      let top = this.elementRef.nativeElement.offsetTop;
-      let width = this.elementRef.nativeElement.offsetWidth;
-      let height = this.elementRef.nativeElement.offsetHeight;
-      let canvas = this.canvas.nativeElement;
-      canvas.width = width - 8;
-      canvas.height = height - 8;
-      let mainContext = this.mainCanvas.getContext('2d');
-      let ctx = canvas.getContext('2d');
-      if(ctx && mainContext) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        let imageData = mainContext.getImageData(left, top, width, height);
-        ctx.putImageData(imageData, 0, 0);
-      }
+      setTimeout(() => {
+        let left = this.elementRef.nativeElement.offsetLeft;
+        let top = this.elementRef.nativeElement.offsetTop;
+        let width = this.elementRef.nativeElement.offsetWidth;
+        let height = this.elementRef.nativeElement.offsetHeight;
+        let canvas = this.canvas.nativeElement;
+        canvas.width = width - 8;
+        canvas.height = height - 8;
+        let mainContext = this.mainCanvas.getContext('2d');
+        let ctx = canvas.getContext('2d');
+        if(ctx && mainContext) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          let imageData = mainContext.getImageData(left, top, width, height);
+          ctx.putImageData(imageData, 0, 0);
+        }
+      }, 100);
     }
   }
 }

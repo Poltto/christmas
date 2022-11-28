@@ -5,6 +5,6 @@ WORKDIR /node
 COPY package.json .
 RUN npm install
 COPY . .
-CMD ["node", "run", "watch"]
+CMD ["npm", "run", "watch"]
 
 

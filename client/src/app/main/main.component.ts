@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '../api.service';
 import { fromEvent } from 'rxjs';
 import { CalendarService } from '../calendar.service';
+import { isSameDay } from 'date-fns';
 
 interface IDoor {
   id: number;
@@ -35,6 +36,10 @@ export class MainComponent implements AfterViewInit {
         }
       });
     })
+  }
+
+  public isOpenable(door: any) {
+    return isSameDay(new Date(2022, 11, 1), new Date(door.date));
   }
 
   public openDoor(door: IDoor) {
