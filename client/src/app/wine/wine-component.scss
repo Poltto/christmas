@@ -1,0 +1,32 @@
+:host {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .wine-container {
+    height: 200px;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .wine {
+      background-color: transparent;
+      background-image: url('/assets/wine.png');
+      background-position: center;
+      background-size: 100%;
+      background-repeat: no-repeat;
+      height: 200px;
+      width: 200px;
+    }
+
+    .wine-text {
+      font-size: 14px;
+      color: #444444;
+      text-align: center;
+      margin-top: 10px;
+    }
+  }
+}
