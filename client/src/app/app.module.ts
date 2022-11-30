@@ -17,6 +17,7 @@ import { GlitterComponent } from './glitter/glitter.component';
 import { HttpInterceptor } from './http.interceptor';
 import { CalendarDoorMessageComponent } from './calendar-door-message/calendar-door-message.component';
 import { SmokeComponent } from './smoke/smoke.component';
+import { SnowfallComponent } from './snow-fall/snowfall-component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { SmokeComponent } from './smoke/smoke.component';
     CalendarDoorComponent,
     CalendarOpenDoorComponent,
     GlitterComponent,
-    CalendarDoorMessageComponent
+    CalendarDoorMessageComponent,
+    SnowfallComponent
   ],
   exports: [
     MainComponent,
@@ -34,7 +36,8 @@ import { SmokeComponent } from './smoke/smoke.component';
     CalendarDoorComponent,
     CalendarOpenDoorComponent,
     GlitterComponent,
-    CalendarDoorMessageComponent
+    CalendarDoorMessageComponent,
+    SnowfallComponent
   ],
   imports: [
     BrowserModule,
