@@ -40,21 +40,6 @@ router.post('/update-door', function(req, res) {
       res.status(401).send('Unauthorized');
     } else {
       try {
-        content = `Now broken <br>
-but still loved, <br>
-they traveled with you. <br><br>
-
-They kept you warm <br>
-kept you from slipping <br>
-and looked stylish, too <br>
-
-They now await <br>
-for better days <br>
-when you get them repaired <br><br>
-
-Gathering dust <br>
-next to other wearable stuff <br>
-for chocolate, be prepared <br><br>`
         db_functions.updateDoor(doorId, content);
         res.status(200).send('OK');
       } catch(e) {
