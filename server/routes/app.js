@@ -30,6 +30,41 @@ router.post('/get-calendar-doors', function(req, res) {
   })
 })
 
+router.post('/update-door', function(req, res) {
+  let authHeader = req.headers.authorization;
+  let token = authHeader && authHeader.split(' ')[1];
+  let content = req.body.content;
+  let doorId = req.body.doorId;
+  jwt.verify(token, 'supersafesecretkey', function(err, decoded) {
+    if (err) {
+      res.status(401).send('Unauthorized');
+    } else {
+      try {
+        content = `Now broken <br>
+but still loved, <br>
+they traveled with you. <br><br>
+
+They kept you warm <br>
+kept you from slipping <br>
+and looked stylish, too <br>
+
+They now await <br>
+for better days <br>
+when you get them repaired <br><br>
+
+Gathering dust <br>
+next to other wearable stuff <br>
+for chocolate, be prepared <br><br>`
+        db_functions.updateDoor(doorId, content);
+        res.status(200).send('OK');
+      } catch(e) {
+        console.log(e);
+        res.status(500).send('Internal Server Error');
+      }
+    }
+  });
+});
+
 router.post('/reset-doors', function(req, res) {
   let authHeader = req.headers.authorization;
   let token = authHeader && authHeader.split(' ')[1];

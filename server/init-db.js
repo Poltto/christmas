@@ -94,6 +94,26 @@ which is good for otherwise my ears out I would tear.', '2022-12-01 00:00:00'),
   })
 }
 
+function updateDoor(id, content) {
+
+  const pool = new Pool({
+    user: process.env.POSTGRES_USERNAME,
+    host: process.env.POSTGRES_HOST,
+    database: process.env.POSTGRES_DATABASE,
+    password: process.env.POSTGRES_PASSWORD,
+    port: process.env.POSTGRES_PORT,
+  })
+
+
+  pool.query(`
+    UPDATE public.door
+    SET content = '${content}'
+    WHERE id = '${id}';
+    `, [], (err, res) => {
+      console.log(err, res);
+  });
+}
+
 function resetDB() {
 
   const pool = new Pool({
@@ -115,5 +135,6 @@ function resetDB() {
 
 module.exports = {
   initDb,
-  resetDB
+  resetDB,
+  updateDoor
 };
