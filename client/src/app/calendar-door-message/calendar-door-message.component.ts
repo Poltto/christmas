@@ -43,49 +43,12 @@ export class CalendarDoorMessageComponent implements AfterViewInit, OnDestroy{
   }
 
   private open(openGift: IOpenGift) {
-    if(this.innerContainer) {
-      this.innerContainer.nativeElement.style.opacity = 0;
-    }
     this.currentMessage = openGift.door.content;
-    this.elementRef.nativeElement.style.left = openGift.location.x + 50 + 'px';
-    this.elementRef.nativeElement.style.top = openGift.location.y + 50 + 'px';
-    this.elementRef.nativeElement.style.width = 0 + 'px';
-    this.elementRef.nativeElement.style.height = 0 + 'px';
-    this.elementRef.nativeElement.style.display = 'block';
-    this.elementRef.nativeElement.style.opacity = 1;
-    let animationDuration = 1000;
-    let targetWidth = 1000;
-    let targetHeight = 600;
-    let targetLocation = {
-      x: (window.innerWidth/2) - (targetWidth/2),
-      y: (window.innerHeight/2) - targetHeight/2
-    }
-    let timeElapsed = 0;
-    let interval = setInterval(() => {
-      if(timeElapsed <= animationDuration) {
-        this.elementRef.nativeElement.style.width = targetWidth * (timeElapsed / animationDuration) + 'px';
-        this.elementRef.nativeElement.style.height = targetHeight * (timeElapsed / animationDuration) + 'px';
-        this.elementRef.nativeElement.style.left = openGift.location.x + 50 + (targetLocation.x - (openGift.location.x + 50)) * (timeElapsed / animationDuration) + 'px';
-        this.elementRef.nativeElement.style.top = openGift.location.y + 50 + (targetLocation.y - (openGift.location.y + 50)) * (timeElapsed / animationDuration) + 'px';
-        timeElapsed += 10;
-      }
-    }, 10)
-    setTimeout(() => {
-      clearInterval(interval);
-      if(this.innerContainer) {
-        this.innerContainer.nativeElement.style.opacity = 1;
-      }
-    }, 1100);
+    this.elementRef.nativeElement.classList.add('show');
   }
 
-  private close() {
-    if(this.innerContainer) {
-      this.innerContainer.nativeElement.style.opacity = 0;
-    }
-    this.elementRef.nativeElement.style.display = 'none';
-    this.elementRef.nativeElement.style.width = 0;
-    this.elementRef.nativeElement.style.height = 0;
-
+  public close() {
+    this.elementRef.nativeElement.classList.remove('show');
   }
 
   public ngOnDestroy() {

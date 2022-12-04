@@ -1,15 +1,42 @@
 :host {
   overflow: hidden;
-  top: 0;
   opacity: 0;
-  left: 0;
   width: 0;
   height: 0;
   position: fixed;
   z-index: 99999;
-  display: flex;
   font-family: 'press_gutenbergregular';
   background: transparent;
+  transition: opacity 0.3s;
+  pointer-events: none;
+
+  &.show {
+    display: flex;
+    opacity: 1;
+    width: 90%;
+    height: 90%;
+    pointer-events: all;
+
+    .gift-message-container {
+      .gift-message-inner-container {
+        opacity: 1;
+      }
+    }
+  }
+
+  .close-container {
+    position: absolute;
+    top: 40px;
+    right: 20%;
+    border-radius: 50%;
+    height: 25px;
+    width: 25px;
+    background-color: transparent;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
   .gift-message-container {
     flex: 1;

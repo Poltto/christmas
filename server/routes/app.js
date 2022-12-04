@@ -40,6 +40,7 @@ router.post('/update-door', function(req, res) {
       res.status(401).send('Unauthorized');
     } else {
       try {
+        console.log(doorId, content);
         db_functions.updateDoor(doorId, content);
         res.status(200).send('OK');
       } catch(e) {
