@@ -39,7 +39,6 @@ export class MainComponent implements AfterViewInit {
   }
 
   public isOpenable(door: any) {
-    return true;
     return isSameDay(new Date(), new Date(door.date));
   }
 
